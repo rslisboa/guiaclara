@@ -10,12 +10,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Corporate Clarity -->
-    <!-- Application Structure Plan: The SPA is designed as a user-friendly, thematic journey. It starts with a high-impact "Before vs. After" comparison to show value. It then presents a high-level process flowchart ("O Ciclo de Vida"). A central "Rules Dashboard" uses a donut chart for allowed expenses and an icon-driven list for forbidden ones, facilitating quick understanding. The critical expense reporting process gets its own detailed flowchart section. Consequences are visualized with a bar chart for blocking criteria, making complex rules easy to grasp. The app concludes with a practical, searchable table of all allowed expense categories from Annex I, acting as a quick-reference tool. This structure prioritizes user task-flow and comprehension over the report's linear chapter format. -->
-    <!-- Visualization & Content Choices: 
+    <!-- Application Structure Plan: The SPA is designed as a user-friendly, thematic journey. It starts with a high-impact "Before vs. After" comparison to show value. It then presents a high-level process flowchart ("O Ciclo de Vida"). A central "Rules Dashboard" uses a table for allowed expenses and an icon-driven list for forbidden ones, facilitating quick understanding. The critical expense reporting process gets its own detailed flowchart section. Consequences are visualized with a bar chart for blocking criteria, making complex rules easy to grasp. A new section covers specific use cases for card usage during manager absences. The app concludes with a practical, searchable table of all allowed expense categories from Annex I, acting as a quick-reference tool. This structure prioritizes user task-flow and comprehension over the report's linear chapter format. -->
+    <!-- Visualization & Content Choices:
         - Report Info: Before vs. After (Cash vs. Card). Goal: Inform/Compare. Method: HTML/CSS side-by-side cards. Justification: Immediate visual impact. Library: None.
         - Report Info: Card Lifecycle. Goal: Organize. Method: HTML/CSS flowchart. Justification: Simple overview of the core process. Library: None.
-        - Report Info: Allowed Expense Categories. Goal: Compare/Inform. Method: Donut Chart. Justification: Visualizes spending composition effectively. Library: Chart.js (Canvas).
+        - Report Info: Allowed Expense Categories. Goal: Compare/Inform. Method: Table. Justification: Provides clear, structured details for each category instead of a general proportion. Library: None (HTML/CSS).
         - Report Info: Blocking Criteria. Goal: Compare. Method: Bar Chart. Justification: Intuitively compares urgency levels based on transaction value. Library: Chart.js (Canvas).
+        - Report Info: Usage in Specific Situations (Absences). Goal: Organize/Inform. Method: Table. Justification: Clearly outlines rules and responsibilities for specific scenarios. Library: None (HTML/CSS).
         - Report Info: Annex I Categories. Goal: Inform/Organize. Method: Interactive searchable list. Justification: Provides a practical quick-reference tool for users. Library: Vanilla JS.
         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. All diagrams are HTML/CSS, charts use Chart.js Canvas. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -40,6 +41,7 @@
                 <button data-target="process" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Processo</button>
                 <button data-target="rules" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Regras</button>
                 <button data-target="consequences" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Consequências</button>
+                <button data-target="situations" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Situações Específicas</button>
                 <button data-target="reference" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Consulta Rápida</button>
             </nav>
         </div>
@@ -72,19 +74,19 @@
 
         <section id="process" class="mb-20">
             <h2 class="text-3xl font-bold text-center mb-4 text-sky-900">O Ciclo de Vida do Cartão</h2>
-            <p class="text-lg text-center text-slate-600 max-w-3xl mx-auto mb-12">Desde a solicitação até o monitoramento, o uso do cartão segue um fluxo claro para garantir controle e conformidade em todas as etapas.</p>
+            <p class="text-lg text-center text-slate-600 max-w-3xl mx-auto mb-12">Desde a sua emissão até o monitoramento, o uso do cartão segue um fluxo claro para garantir controle e conformidade.</p>
             <div class="flex flex-col md:flex-row items-center justify-center gap-4 md:gap-0">
                 <div class="flow-step text-center p-6 rounded-lg bg-white shadow-md border-t-4 border-sky-500 max-w-xs w-full">
                     <div class="text-5xl mb-3">1️⃣</div>
-                    <h3 class="text-lg font-bold text-slate-900">Solicitação e Ativação</h3>
-                    <p class="text-sm text-slate-600">O RH informa o Financeiro, que emite o cartão. O gerente realiza um treinamento obrigatório para ativar o uso.</p>
+                    <h3 class="text-lg font-bold text-slate-900">Emissão e Ativação</h3>
+                    <p class="text-sm text-slate-600">O Financeiro emite o cartão. O gerente realiza um treinamento obrigatório e sua participação é validada para ativar o uso.</p>
                 </div>
                 <div class="text-4xl text-sky-400 font-light hidden md:block mx-4">→</div>
                 <div class="text-4xl text-sky-400 font-light block md:hidden my-4 transform rotate-90">→</div>
                 <div class="flow-step text-center p-6 rounded-lg bg-white shadow-md border-t-4 border-sky-500 max-w-xs w-full">
                     <div class="text-5xl mb-3">2️⃣</div>
-                    <h3 class="text-lg font-bold text-slate-900">Uso e Prestação de Contas</h3>
-                    <p class="text-sm text-slate-600">O cartão é usado para despesas autorizadas. Cada compra deve ser justificada na plataforma em até 48h.</p>
+                    <h3 class="text-lg font-bold text-slate-900">Uso e Prestação de Contas Essencial</h3>
+                    <p class="text-sm text-slate-600">O cartão é usado para despesas autorizadas. A **inserção da etiqueta e da nota fiscal/recibo é essencial** para cada compra na plataforma, em até 48h.</p>
                 </div>
                 <div class="text-4xl text-sky-400 font-light hidden md:block mx-4">→</div>
                 <div class="text-4xl text-sky-400 font-light block md:hidden my-4 transform rotate-90">→</div>
@@ -99,12 +101,22 @@
         <section id="rules" class="mb-20">
             <h2 class="text-3xl font-bold text-center mb-12 text-sky-900">Regras de Ouro: O Que Você Precisa Saber</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
+
                 <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col">
                     <h3 class="text-xl font-bold text-center text-slate-900 mb-4">Gastos Permitidos</h3>
                     <p class="text-center text-sm text-slate-600 mb-6">O cartão deve ser usado exclusivamente para despesas operacionais da loja. Veja as categorias mais comuns.</p>
-                    <div class="chart-container flex-grow">
-                        <canvas id="allowedExpensesChart"></canvas>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-sm text-slate-700">
+                            <thead class="text-xs text-slate-900 uppercase bg-slate-100">
+                                <tr>
+                                    <th scope="col" class="py-3 px-6 rounded-tl-lg">Categoria</th>
+                                    <th scope="col" class="py-3 px-6 rounded-tr-lg">Exemplos</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expenseTableMain">
+                                <!-- Table rows will be populated by JavaScript -->
+                            </tbody>
+                        </table>
                     </div>
                 </div>
 
@@ -152,11 +164,48 @@
                               <div class="bg-red-50 border border-red-200 p-4 rounded-lg flex flex-col justify-start">
                                  <h5 class="font-bold text-red-800">Não Reconhecimento</h5>
                                  <div class="w-full h-1 bg-red-300 my-2"></div>
-                                 <p class="text-xs text-slate-600">Abertura de processo disciplinar, desconto em folha e bloqueio definitivo do cartão.</p>
+                                 <p class="text-xs text-slate-600">Abertura de processo disciplinar, desconto em folha e **bloqueio preventivo** do cartão.</p>
                              </div>
                          </div>
                      </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="situations" class="mb-20 bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-3xl font-bold text-center mb-4 text-sky-900">Uso do Cartão em Situações Específicas</h2>
+            <p class="text-lg text-center text-slate-600 max-w-3xl mx-auto mb-8">Saiba como proceder com o uso do cartão em cenários não usuais, como o afastamento do gerente, para garantir a conformidade.</p>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-sm text-slate-700">
+                    <thead class="text-xs text-slate-900 uppercase bg-slate-100">
+                        <tr>
+                            <th scope="col" class="py-3 px-6 rounded-tl-lg">Situação</th>
+                            <th scope="col" class="py-3 px-6">Pode usar cartão de outra loja?</th>
+                            <th scope="col" class="py-3 px-6">Justificar uso no campo “Descrição”?</th>
+                            <th scope="col" class="py-3 px-6 rounded-tr-lg">Responsável pela prestação de contas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                            <td class="py-3 px-6 font-semibold">Gerente em férias ou afastamento temporário</td>
+                            <td class="py-3 px-6">Não. Usa-se o cartão da própria loja.</td>
+                            <td class="py-3 px-6">Não, apenas informar tipo de gasto</td>
+                            <td class="py-3 px-6">Líder ou Supervisor da loja</td>
+                        </tr>
+                        <tr class="bg-white border-b border-slate-100 hover:bg-slate-50">
+                            <td class="py-3 px-6 font-semibold">Gerente desligado, sem novo gerente nomeado</td>
+                            <td class="py-3 px-6">Sim, mediante autorização financeira.</td>
+                            <td class="py-3 px-6">Sim. Indicar loja beneficiada</td>
+                            <td class="py-3 px-6">Gerente temporário</td>
+                        </tr>
+                        <tr class="bg-white hover:bg-slate-50">
+                            <td class="py-3 px-6 font-semibold rounded-bl-lg">Falha técnica no cartão</td>
+                            <td class="py-3 px-6">Não. Usar sangria só com autorização.</td>
+                            <td class="py-3 px-6">Não se aplica</td>
+                            <td class="py-3 px-6 rounded-br-lg">A definir com o financeiro, conforme o caso</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </section>
 
@@ -181,7 +230,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    
+
     const wrapLabel = (label) => {
         const maxLength = 16;
         if (typeof label !== 'string' || label.length <= maxLength) return label;
@@ -206,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let label = item.chart.data.labels[item.dataIndex];
         return Array.isArray(label) ? label.join(' ') : label;
     };
-    
+
     const sharedChartOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -230,24 +279,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         },
     };
-
-    const allowedExpensesCtx = document.getElementById('allowedExpensesChart');
-    if (allowedExpensesCtx) {
-        new Chart(allowedExpensesCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Manutenção', 'Materiais (Limpeza, Escritório)', 'Serviços (Gráfica, Limpeza)', 'Marketing e Eventos', 'Transporte e Correios'].map(wrapLabel),
-                datasets: [{
-                    data: [30, 25, 20, 15, 10],
-                    backgroundColor: ['#0ea5e9', '#38bdf8', '#7dd3fc', '#bae6fd', '#e0f2fe'],
-                    borderColor: '#ffffff',
-                    borderWidth: 4,
-                    hoverOffset: 10
-                }]
-            },
-            options: { ...sharedChartOptions, cutout: '60%' }
-        });
-    }
 
     const blockingCriteriaCtx = document.getElementById('blockingCriteriaChart');
     if (blockingCriteriaCtx) {
@@ -278,25 +309,50 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const expenseData = [
-        { sap: '5102505001', label: 'MARKETING_PUBLICIDADE E PROPAGANDA', examples: 'Ações promocionais, brindes para campanha, mídia local, banners.' },
-        { sap: '5103505001', label: 'MATERIAL DE LIMPEZA', examples: 'Detergente, sabão, desinfetante, papel toalha, panos, álcool.' },
-        { sap: '5103505005', label: 'MATERIAL DE INFORMÁTICA', examples: 'Mouse, teclado, cabos, pendrive, fontes (sem controle patrimonial).' },
-        { sap: '5103505006', label: 'MATERIAL DE ESCRITÓRIO', examples: 'Canetas, clips, cadernos, pastas, grampeadores, etiquetas.' },
-        { sap: '5103505007', label: 'MATERIAL DE COPA E COZINHA', examples: 'Pratos, copos, talheres, filtros de café, potes (sem elétricos).' },
-        { sap: '5103510001', label: 'MANUTENÇÃO CIVIL', examples: 'Pequenos reparos em paredes, troca de vidros, ajustes em prateleiras.' },
-        { sap: '5103510005', label: 'MANUTENÇÃO ELETRICO', examples: 'Troca de tomadas, disjuntores, interruptores, reparos de fiação simples.' },
-        { sap: '5103510007', label: 'MANUTENÇÃO EQUIPAMENTOS', examples: 'Reparos em impressoras de etiqueta, máquinas de estampar (fora de garantia).' },
-        { sap: '5103510010', label: 'MANUTENÇÃO AR-CONDICIONADO', examples: 'Limpeza de filtro, carga de gás, troca de controle remoto.' },
-        { sap: '5104007003', label: 'TRANSPORTE SERVIÇOS EMERGENCIAS', examples: 'Frete local emergencial, motoboy para documentos ou itens urgentes.' },
-        { sap: '5104505006', label: 'SERVIÇOS GRÁFICOS E DE COPIADORAS', examples: 'Impressão de banners, adesivos, folders, encadernações.' },
-        { sap: '5104505007', label: 'SERVIÇOS DE LIMPEZA', examples: 'Contratação pontual de diaristas, faxineiras para limpeza extra.' },
-        { sap: '5104610002', label: 'CORREIOS_SEDEX/AR/POSTAGEM', examples: 'Envio de documentos, pacotes pequenos, devoluções via Correios.' },
-        { sap: '5105505008', label: 'LANCHES DE REFEIÇÕES', examples: 'Coffee break para ações internas, lanches para treinamentos, premiações.' },
-        { sap: '5103505007', label: 'AGUA POTÁVEL', examples: 'Compra de galões de água mineral para equipe ou clientes.' },
-        { sap: '5103505006', label: 'BOBINA ECF', examples: 'Compra de bobinas para impressoras fiscais.' },
-        { sap: '5103510007', label: 'CHAVEIRO EMERGENCIAL', examples: 'Abertura ou troca de fechadura de cofres, estoques (emergencial).' },
-        { sap: '5103510007', label: 'MANUTENÇÃO MAQ ESTAMPAR', examples: 'Reparos simples em máquinas de estampar produtos promocionais.' }
+        { sap: '5102505001', label: 'MARKETING_PUBLICIDADE E PROPAGANDA', examples: 'Ações promocionais, compra de brindes para campanha, contratação de mídia local, impulsionamento de redes sociais, banners promocionais.' },
+        { sap: '5103505001', label: 'MATERIAL DE LIMPEZA', examples: 'Detergente, sabão, desinfetante, papel toalha, pano de chão, esponja, rodo, vassoura, álcool, produtos de higiene ambiental.' },
+        { sap: '5103505005', label: 'MATERIAL DE INFORMÁTICA', examples: 'Mouse, teclado, cabos, pendrive, suportes de notebook, fontes, roteadores, hubs USB, cartões de memória (sem controle patrimonial).' },
+        { sap: '5103505006', label: 'MATERIAL DE ESCRITÓRIO', examples: 'Canetas, clips, cadernos, pastas, blocos de anotação, grampeadores, etiquetas, organizadores de mesa.' },
+        { sap: '5103505007', label: 'MATERIAL DE COPA E COZINHA', examples: 'Pratos, copos, talheres, filtros de café, garrafas térmicas, panos de prato, esponjas, potes plásticos (sem elétricos).' },
+        { sap: '5103510001', label: 'MANUTENÇÃO CIVIL', examples: 'Pequenos reparos em paredes, troca de revestimentos, consertos em portas ou fechaduras (exceto chaveiro), troca de vidros, ajustes em prateleiras fixas.' },
+        { sap: '5103510005', label: 'MANUTENÇÃO ELETRICO', examples: 'Troca de tomadas, disjuntores, interruptores, reatores, soquetes, extensões elétricas, pequenos reparos de fiação de baixa tensão.' },
+        { sap: '5103510007', label: 'MANUTENÇÃO EQUIPAMENTOS', examples: 'Reparos em impressoras de etiqueta, máquinas de estampar, computadores (desde que fora de garantia e com baixo valor), ferramentas manuais.' },
+        { sap: '5103510010', label: 'MANUTENÇÃO AR-CONDICIONADO', examples: 'Manutenção corretiva/preventiva simples de ar-condicionado (limpeza de filtro, carga de gás, troca de controle remoto ou peças simples).' },
+        { sap: '5104007003', label: 'TRANSPORTE SERVIÇOS EMERGENCIAS', examples: 'Frete local emergencial, motoboy para transporte de documentos ou itens urgentes entre lojas ou matriz, entrega de materiais críticos.' },
+        { sap: '5104505006', label: 'SERVIÇOS GRÁFICOS E DE COPIADORAS', examples: 'Impressão de banners, adesivos promocionais, folders, encadernações, produção de manuais impressos.' },
+        { sap: '5104505007', label: 'SERVIÇOS DE LIMPEZA', examples: 'Contratação pontual de diaristas, faxineiras para limpeza extra, empresas terceirizadas em serviços avulsos de limpeza ou desinfecção emergencial.' },
+        { sap: '5104610002', label: 'CORREIOS_SEDEX/AR/POSTAGEM', examples: 'Envio de documentos físicos via Sedex, AR, carta registrada, pacotes pequenos, devoluções via Correios.' },
+        { sap: '5105505008', label: 'LANCHES DE REFEIÇÕES', examples: 'Compra de coffee break para ações internas, lanches para treinamentos, premiações, eventos internos autorizados.' },
+        { sap: '5103505007', label: 'AGUA POTÁVEL', examples: 'Compra de galões de água mineral, garrafas para abastecimento da equipe ou clientes em loja (se previsto nas diretrizes operacionais).' },
+        { sap: '5103505006', label: 'BOBINA ECF', examples: 'Compra de bobinas para ECF ou impressoras fiscais (uso obrigatório nas lojas que não têm fornecimento centralizado).' },
+        { sap: '5103510007', label: 'CHAVEIRO EMERGENCIAL', examples: 'Serviços de abertura ou troca de fechadura de cofres, salas administrativas, estoques, vitrines – exclusivamente em situações emergenciais.' },
+        { sap: '5103510007', label: 'MANUTENÇÃO MAQ ESTAMPAR', examples: 'Reparos simples ou ajustes técnicos em máquinas de estampar produtos promocionais nas lojas – sem controle patrimonial e com nota fiscal do prestador.' }
     ];
+
+    const expenseTableMainBody = document.getElementById('expenseTableMain'); // Correctly target the tbody
+    if (expenseTableMainBody) {
+        const commonExpenseCategories = [
+            { label: 'Marketing e Publicidade', examples: 'Ações promocionais, brindes, mídia local, banners.' },
+            { label: 'Material de Limpeza', examples: 'Detergente, sabão, desinfetante, papel toalha.' },
+            { label: 'Manutenção Civil', examples: 'Pequenos reparos em paredes, troca de vidros, ajustes.' },
+            { label: 'Serviços Gráficos', examples: 'Impressão de banners, adesivos, folders.' },
+            { label: 'Lanches e Refeições', examples: 'Coffee break, lanches para treinamentos, premiações.' },
+            { label: 'Outros', examples: 'Água potável, bobinas ECF, chaveiro emergencial, etc.' }
+        ];
+
+        let tableRows = '';
+        commonExpenseCategories.forEach((item, index) => {
+            const isLastRow = index === commonExpenseCategories.length - 1;
+            tableRows += `
+                <tr class="bg-white ${isLastRow ? '' : 'border-b border-slate-100'} hover:bg-slate-50">
+                    <td class="py-3 px-6 font-semibold ${isLastRow ? 'rounded-bl-lg' : ''}">${item.label}</td>
+                    <td class="py-3 px-6 ${isLastRow ? 'rounded-br-lg' : ''}">${item.examples}</td>
+                </tr>
+            `;
+        });
+        expenseTableMainBody.innerHTML = tableRows; // Set innerHTML of tbody
+    }
+
 
     const expenseTable = document.getElementById('expenseTable');
     const searchInput = document.getElementById('searchInput');
@@ -317,11 +373,11 @@ document.addEventListener('DOMContentLoaded', function () {
             expenseTable.innerHTML += row;
         });
     };
-    
+
     searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
-        const filteredData = expenseData.filter(item => 
-            item.label.toLowerCase().includes(searchTerm) || 
+        const filteredData = expenseData.filter(item =>
+            item.label.toLowerCase().includes(searchTerm) ||
             item.examples.toLowerCase().includes(searchTerm)
         );
         renderTable(filteredData);
