@@ -10,7 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Corporate Clarity -->
-    <!-- Application Structure Plan: The SPA is designed as a user-friendly, thematic journey. It starts with a high-impact "Before vs. After" comparison to show value. It then presents a high-level process flowchart ("O Ciclo de Vida"). A central "Rules Dashboard" uses a table for allowed expenses and an icon-driven list for forbidden ones, facilitating quick understanding. The critical expense reporting process gets its own detailed flowchart section. Consequences are visualized with a bar chart for blocking criteria, making complex rules easy to grasp. A new section covers specific use cases for card usage during manager absences. A dedicated "Suporte" section is added for external help resources. The app concludes with a practical, searchable table of all allowed expense categories from Annex I, acting as a quick-reference tool. This structure prioritizes user task-flow and comprehension over the report's linear chapter format. -->
+    <!-- Application Structure Plan: The SPA is designed as a user-friendly, thematic journey. It starts with a high-impact "Before vs. After" comparison to show value. It then presents a high-level process flowchart ("O Ciclo de Vida"). A central "Rules Dashboard" uses a table for allowed expenses and an icon-driven list for forbidden ones, facilitating quick understanding. The critical expense reporting process gets its own detailed flowchart section. Consequences are visualized with a bar chart for blocking criteria, making complex rules easy to grasp. A new section covers specific use cases for card usage during manager absences. A dedicated "Suporte" section is added for external help resources. A new "Pesquisa no Documento" section allows direct content search within the policy document. The app concludes with a practical, searchable table of all allowed expense categories from Annex I, acting as a quick-reference tool. This structure prioritizes user task-flow and comprehension over the report's linear chapter format. -->
     <!-- Visualization & Content Choices: 
         - Report Info: Before vs. After (Cash vs. Card). Goal: Inform/Compare. Method: HTML/CSS side-by-side cards. Justification: Immediate visual impact. Library: None.
         - Report Info: Card Lifecycle. Goal: Organize. Method: HTML/CSS flowchart. Justification: Simple overview of the core process. Library: None.
@@ -18,6 +18,7 @@
         - Report Info: Blocking Criteria. Goal: Compare. Method: Bar Chart. Justification: Intuitively compares urgency levels based on transaction value. Library: Chart.js (Canvas).
         - Report Info: Usage in Specific Situations (Absences). Goal: Organize/Inform. Method: Table. Justification: Clearly outlines rules and responsibilities for specific scenarios. Library: None (HTML/CSS).
         - Report Info: Support/Help Resources. Goal: Inform. Method: Text link. Justification: Provides direct access to external support. Library: None (HTML).
+        - Report Info: Document Search. Goal: Inform/Explore. Method: Text search input with results display. Justification: Allows direct keyword search within the source document. Library: Vanilla JS, content_fetcher API.
         - Report Info: Annex I Categories. Goal: Inform/Organize. Method: Interactive searchable list. Justification: Provides a practical quick-reference tool for users. Library: Vanilla JS.
         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. All diagrams are HTML/CSS, charts use Chart.js Canvas. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -44,6 +45,7 @@
                 <button data-target="consequences" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Consequências</button>
                 <button data-target="situations" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Situações Específicas</button>
                 <button data-target="support" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Suporte</button>
+                <button data-target="document-search" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Pesquisa Documento</button>
                 <button data-target="reference" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Consulta Rápida</button>
             </nav>
         </div>
@@ -219,6 +221,24 @@
                 https://l1nq.com/47TUr
             </a>
             <p class="text-sm text-slate-500 mt-4">Este link redireciona para a Central de Ajuda da Clara.</p>
+        </section>
+
+        <section id="document-search" class="mb-20 bg-white rounded-xl shadow-lg p-6">
+            <h2 class="text-3xl font-bold text-center mb-4 text-sky-900">Pesquisa no Documento da Política</h2>
+            <p class="text-lg text-center text-slate-600 max-w-3xl mx-auto mb-8">Pesquise por qualquer termo diretamente no conteúdo completo da Política de Uso dos Cartões Corporativos Clara.</p>
+            <div class="max-w-4xl mx-auto">
+                <input type="text" id="documentSearchInput" class="w-full p-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-500 mb-4" placeholder="Digite seu termo de busca (ex: 'fraude', 'prazo')... ">
+                <button id="documentSearchBtn" class="w-full bg-sky-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-sky-700 transition duration-300 ease-in-out shadow-md">
+                    Buscar no Documento
+                </button>
+                <div id="documentSearchResults" class="mt-6 space-y-4">
+                    <p id="searchStatus" class="text-center text-slate-500">Documento da política carregado e pronto para busca.</p>
+                    <div id="searchLoadingIndicator" class="mt-2 text-center text-sky-600 hidden">
+                        <span class="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-sky-600"></span>
+                        <span class="ml-2">Buscando no documento...</span>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <section id="reference" class="mb-16">
@@ -423,6 +443,242 @@ document.addEventListener('DOMContentLoaded', function () {
     sections.forEach(section => {
         observer.observe(section);
     });
+
+    // Document Search Functionality
+    const documentSearchInput = document.getElementById('documentSearchInput');
+    const documentSearchBtn = document.getElementById('documentSearchBtn');
+    const documentSearchResults = document.getElementById('documentSearchResults');
+    const searchStatus = document.getElementById('searchStatus');
+    const searchLoadingIndicator = document.getElementById('searchLoadingIndicator');
+
+    // Content of POLITICA DE UTILIZAÇÃO_CARTÕES CLARA.docx embedded directly
+    const policyDocumentContent = `Política de Uso dos Cartões Corporativos Clara nas Lojas
+POLÍTICA INTERNA
+[CONTAS A RECEBER]
+ÚLTIMA ATUALIZAÇÃO: 09/06/2025
+SUMÁRIO
+1. 	Objetivo	3
+2. 	Abrangência	4
+3. 	Benefícios	4
+4. 	Definições Importantes	7
+5. 	Limite dos Cartões	10
+6. 	Prestação de Contas	11
+7. 	Restrições de Uso	20
+8. 	Responsabilidades	27
+9. 	Monitoramento, Auditoria e Fraudes	32
+10. 	Revisão	35
+Anexo I – Quadro de Etiquetas por Tipo de Gasto 	35
+
+Objetivo
+Estabelecer os  conceitos, responsabilidades, critérios operacionais e limites  aplicáveis à utilização dos cartões de crédito corporativos fornecidos aos gerentes das lojas do Grupo SBF, incluindo as unidades Centauro e Físia.
+Esta política tem como objetivo principal garantir o  uso adequado, transparente e controlado  dos   cartões no contexto das atividades operacionais das lojas, abrangendo desde a autorização de despesas até a prestação de contas obrigatória.
+As diretrizes aqui descritas visam assegurar a  aderência às normas internas da companhia,  à  legislação vigente  e às boas práticas de governança corporativa, reduzindo riscos financeiros e operacionais.
+A gestão dos cartões é realizada por meio da  plataforma digital da CLARA INSTITUIÇÃO DE PAGAMENTO LTDA ., que centraliza os registros de transações, limites, comprovantes fiscais e relatórios para conciliação.
+
+2. Abrangência
+Esta política se aplica a todos os  gerentes  e  supervisores de lojas  do Grupo SBF (incluindo as operações Centauro e Físia) que tenham sob sua responsabilidade a gestão e utilização de cartões corporativos. Abrange todos os níveis hierárquicos que, no exercício de suas funções, necessitem realizar despesas em nome da empresa, garantindo que tais gastos estejam alinhados aos objetivos estratégicos e às normas de governança corporativa.
+3. Benefícios
+A implementação e o uso adequado dos cartões corporativos Clara oferecem diversos benefícios para a gestão de despesas das lojas:
+•	Agilidade e praticidade: Redução do tempo gasto com processos manuais de adiantamento e reembolso, permitindo que os gerentes foquem nas atividades core do negócio.
+•	Controle em tempo real: Visibilidade instantânea das transações, facilitando o monitoramento e a identificação de desvios.
+•	Redução de fraudes e erros: Eliminação do manuseio de dinheiro em espécie e automatização da prestação de contas, minimizando riscos.
+•	Otimização de custos: Melhor negociação com fornecedores a partir da centralização de pagamentos e análise de dados.
+•	Transparência e conformidade: Fortalecimento da governança corporativa e atendimento às exigências fiscais e de auditoria.
+
+4. Definições Importantes
+Para facilitar a compreensão desta política, são estabelecidas as seguintes definições:
+•	Cartão Corporativo Clara: Cartão de crédito pré-pago, emitido pela CLARA INSTITUIÇÃO DE PAGAMENTO LTDA., destinado exclusivamente ao pagamento de despesas operacionais das lojas, em nome do Grupo SBF.
+•	Gerente da Loja (Titular): Profissional do Grupo SBF responsável pela gestão da loja e titular do cartão corporativo, com autonomia para realizar as despesas dentro dos limites estabelecidos.
+•	Plataforma Clara: Sistema online fornecido pela CLARA INSTITUIÇÃO DE PAGAMENTO LTDA. para registro, gestão e prestação de contas das despesas realizadas com os cartões corporativos.
+•	Prestação de Contas: Processo de registro e justificativa de todas as despesas realizadas com o cartão, mediante a anexação de comprovantes fiscais (notas fiscais, cupons fiscais) e descrições detalhadas na plataforma Clara.
+•	Despesas Operacionais: Gastos essenciais para o funcionamento da loja e para a realização de atividades de marketing, manutenção, suprimentos, serviços gerais, entre outros, conforme detalhado no Anexo I.
+•	Limite Mensal: Valor máximo de despesas autorizado para cada cartão corporativo por ciclo de faturamento, definido com base no porte e nas necessidades operacionais de cada loja.
+
+5. Limite dos Cartões
+O limite de cada cartão corporativo será definido anualmente pelo Departamento Financeiro do Grupo SBF, com base na análise do porte da loja, histórico de despesas e necessidades operacionais. A revisão dos limites pode ser solicitada pelo gerente da loja, mediante justificativa formal, e será avaliada pelo Departamento Financeiro.
+
+6. Prestação de Contas
+A prestação de contas é um processo crucial para a transparência e controle das despesas.
+6.1. Prazo e Forma de Prestação de Contas
+Todas as despesas realizadas com o cartão corporativo deverão ser justificadas na plataforma Clara em até 48 horas após a transação. A justificativa deverá incluir:
+•	Etiqueta de Gasto: Seleção da etiqueta correspondente ao tipo de despesa (ver Anexo I).
+•	Comprovante Fiscal: Anexação da nota fiscal ou cupom fiscal emitido pelo estabelecimento. Em caso de compras em marketplaces ou e-commerce, o comprovante de pagamento da compra deve ser anexado em até 48 horas após a transação, e a nota fiscal será anexada posteriormente (em até 48 horas após o recebimento do produto, quando a nota fiscal é entregue).
+•	Descrição Detalhada: Preenchimento do campo “Descrição” com informações claras e objetivas sobre a natureza da despesa.
+
+6.2. Documentação Necessária
+A nota fiscal com o CNPJ do Grupo SBF é obrigatória para todas as despesas, salvo exceções previstas em lei (ex: recibo de autônomo).
+
+6.3. Monitoramento e Bloqueio Preventivo
+O Departamento Financeiro (Contas a Receber) monitorará diariamente as transações realizadas e a respectiva prestação de contas. Em caso de não conformidade (falta de justificativa, comprovante inadequado ou fora do prazo), serão aplicadas as seguintes medidas:
+•	Transações acima de R$ 1.000,00:
+o	Caso o comprovante não seja anexado em 24 horas da data da compra, o cartão corporativo da loja será bloqueado preventivamente. Será enviada uma cobrança formal por e-mail, informando sobre o bloqueio e a necessidade de regularização imediata.
+•	Transações entre R$ 500,00 e R$ 1.000,00:
+o	Caso o comprovante não seja anexado em 48 horas da data da compra, será enviado um alerta formal por e-mail ao gerente, concedendo mais 48 horas para regularização. Se não houver regularização, o cartão será bloqueado preventivamente e uma nova cobrança formal será enviada por e-mail.
+•	Transações abaixo de R$ 500,00:
+o	Caso o comprovante não seja anexado em 48 horas da data da compra, será enviada uma cobrança por e-mail. Se não houver regularização em 24 horas após a segunda notificação, o cartão será bloqueado preventivamente.
+
+6.4. Uso do Cartão em Situações Específicas
+6.4.1. Afastamento do Gerente
+Em situações de férias, licenças ou afastamentos temporários do gerente titular, a responsabilidade pela prestação de contas recai sobre o supervisor ou líder da loja. O cartão não deve ser usado por outras pessoas.
+6.4.2. Gerente Desligado
+Em caso de desligamento do gerente titular, o cartão deve ser imediatamente desativado pelo Departamento Financeiro. Caso não haja um novo gerente nomeado e haja necessidade de despesas operacionais urgentes, o Departamento Financeiro poderá autorizar, pontualmente, o uso de um cartão de outra loja, mediante justificativa detalhada e acompanhamento rigoroso.
+6.4.3. Falha Técnica no Cartão
+Em situações de falha técnica que impossibilite o uso do cartão, o gerente deverá entrar em contato com o suporte da Clara. Somente em casos extremos e com autorização prévia do Departamento Financeiro, a sangria de caixa poderá ser utilizada como alternativa, desde que devidamente justificada e comprovada.
+
+7. Restrições de Uso
+O uso do cartão corporativo é exclusivo para despesas operacionais da loja e em nome do Grupo SBF. São expressamente proibidas as seguintes despesas:
+•	Despesas Pessoais: Qualquer gasto que não esteja diretamente relacionado às atividades da empresa ou que beneficie o titular do cartão ou terceiros.
+•	Bens Patrimoniais: Compra de eletrônicos, móveis, equipamentos ou outros bens que,
+•	Bens Patrimoniais: Compra de eletrônicos, móveis, equipamentos ou outros bens que, independentemente de estarem disponíveis em loja física ou serem considerados uma necessidade pontual da unidade, caracterizem-se como bens de capital, materiais de infraestrutura, equipamentos técnicos, eletrodomésticos, eletrônicos ou quaisquer outros bens de valor elevado. Exemplos incluem: notebooks, celulares, impressoras, câmeras, modens, roteadores, monitores, maquinários, móveis, eletrodomésticos (geladeiras, micro-ondas, bebedouros), equipamentos de manutenção ou segurança, e itens de infraestrutura predial. Nesses casos, a solicitação é obrigatória via área de Compras, mediante abertura de chamado conforme o procedimento interno da companhia. Exceções só serão autorizadas mediante aprovação prévia e formal da área de Compras ou do departamento financeiro. O descumprimento desta regra será tratado como uso indevido do cartão, sujeito às sanções previstas na política.
+•	Saques e Adiantamentos: Não é permitido retirar dinheiro em espécie, seja por meio de saques em caixas eletrônicos, adiantamentos de valores ou qualquer outra forma que implique no recebimento de numerário.
+•	Conflito de Interesses: Compras ou contratações com empresas de familiares, sócios, ex-colaboradores ou em situações que possam gerar conflito de interesses, salvo com autorização expressa do departamento financeiro de Contas a Receber.
+•	Viagens e Transporte: Despesas com passagens aéreas ou terrestres, hospedagem, aluguel de veículos e transporte de funcionários (incluindo aplicativos de mobilidade como Uber, 99, etc.) para deslocamento a trabalho. Tais despesas devem seguir a política de viagens e reembolsos da companhia.
+•	Outras Proibições: Utilização do cartão em plataformas ou estabelecimentos que ofereçam recompensas financeiras ou pontos diretamente ao CPF do colaborador (ex: cashback pessoal, milhas), transações que violem leis ou regulamentos vigentes (ex: lavagem de dinheiro, financiamento ao terrorismo), ou qualquer transação que contrarie os termos e condições definidos pela administradora do cartão ou que envolva a aquisição de bens ou serviços desnecessários às operações da loja, especialmente itens de luxo ou extravagância.
+
+8. Responsabilidades
+As responsabilidades no uso dos cartões corporativos Clara são compartilhadas entre diversas partes, o que é fundamental para garantir a transparência, segurança e eficácia na gestão dos recursos financeiros da empresa.
+8.1. Responsabilidades Compartilhadas
+O cumprimento integral das responsabilidades é essencial para assegurar a transparência, segurança e eficácia no uso dos recursos financeiros da empresa.
+8.2. Portador do Cartão (Gerente da Loja)
+O gerente da loja, como portador do cartão, tem as seguintes responsabilidades:
+•	Utilizar o cartão exclusivamente para despesas operacionais autorizadas.
+•	Garantir a guarda, segurança e sigilo dos dados do cartão, incluindo a senha.
+•	Realizar a prestação de contas no prazo estabelecido, com a inserção de etiquetas, comprovantes fiscais e descrições completas.
+•	Comunicar imediatamente qualquer uso indevido, extravio ou suspeita de fraude.
+•	Restituir à empresa valores gastos de forma indevida, conforme procedimentos estabelecidos.
+•	Responsabilizar-se por qualquer uso não autorizado decorrente de negligência na guarda ou compartilhamento do cartão.
+•	Em casos de transferência de gerentes entre unidades, o departamento financeiro será comunicado pelo RH para atualizar o alias do cartão na plataforma Clara, refletindo a nova loja sob responsabilidade do gerente.
+8.3. Portador Temporário (em Caso de Afastamento)
+Em situações de afastamento do gerente titular, o portador temporário assume as seguintes responsabilidades:
+•	Assumir todas as responsabilidades formais do portador original durante o período de uso, incluindo a prestação de contas e a guarda adequada do cartão.
+•	Garantir o correto registro das despesas na plataforma Clara.
+•	Manter comunicação clara com o time financeiro em caso de dúvidas ou dificuldades operacionais.
+8.4. Equipe da Loja (Líder ou Supervisor)
+A equipe da loja, incluindo líderes ou supervisores, tem o papel de:
+•	Auxiliar na correta utilização do cartão em caso de ausência do gerente.
+•	Zelar pelo cumprimento das diretrizes da política no ambiente da loja.
+•	Comunicar à área financeira qualquer irregularidade observada no uso dos cartões.
+8.5. Departamento Financeiro (Contas a Receber)
+O Departamento Financeiro (Contas a Receber) desempenha um papel central, sendo responsável por:
+•	Monitorar transações, cobrar justificativas e aplicar bloqueios preventivos conforme necessário.
+•	Analisar solicitações de aumento de limite, contestação de compras e uso excepcional do cartão.
+•	Fornecer suporte aos usuários da plataforma Clara e revisar periodicamente a política.
+•	Aplicar medidas corretivas e disciplinares conforme a gravidade das infrações detectadas.
+8.6. Colaboradores em Geral
+Todos os colaboradores têm a responsabilidade de:
+•	Atuar com diligência e integridade no cumprimento desta política.
+•	Reportar condutas suspeitas ou inconsistentes ao canal adequado ou à área financeira.
+
+9. Monitoramento, Auditoria e Prevenção de Fraudes
+A empresa demonstra um compromisso com a supervisão contínua do uso dos cartões, detalhando seus direitos de monitoramento e auditoria, as consequências da fraude e os canais disponíveis para denúncias.
+9.1. Direito de Monitoramento e Auditoria da Empresa
+A empresa reserva-se o direito de monitorar e auditar as transações realizadas com os cartões de crédito a qualquer momento, a fim de garantir a conformidade com esta política. Este monitoramento está diretamente relacionado aos critérios de bloqueio e prestação de contas. Os portadores dos cartões devem cooperar plenamente com quaisquer investigações ou auditorias relacionadas ao uso dos cartões. Além do acompanhamento rotineiro das transações, a área financeira pode realizar análises detalhadas sobre o valor das despesas, os estabelecimentos onde foram feitas, os itens adquiridos e a frequência ou regularidade de uso em determinados locais. Essas análises visam identificar possíveis desvios de conduta, fraudes ou uso indevido do cartão, assegurando que todas as despesas estejam de acordo com os critérios definidos.
+9.2. Consequências de Fraude e Uso Indevido
+Todos os casos de fraude ou uso indevido do cartão de crédito corporativo serão documentados e relatados às autoridades competentes para investigação e aplicação da lei, em conformidade com as obrigações legais da empresa em casos de atividades ilícitas. A empresa tomará as medidas legais necessárias contra os responsáveis, efetuando também o bloqueio do cartão. Medidas imediatas serão adotadas de acordo com as políticas internas de controle e as disposições legais pertinentes relacionadas a crimes financeiros e fraudes corporativas. As medidas disciplinares aplicáveis em casos de fraude incluem: advertências formais, suspensões, descontos em folha, rescisão do contrato de trabalho e medidas legais conforme previsto na legislação vigente. Além das sanções individuais, a empresa também tomará providências para recuperar quaisquer fundos desviados ou gastos fraudulentos, de acordo com as políticas internas de recuperação de ativos e as leis pertinentes sobre responsabilidade financeira corporativa. A prevenção de fraudes é uma responsabilidade compartilhada entre a empresa e seus funcionários, sendo essencial que todos os colaboradores estejam cientes dos riscos e cooperem com diligência e integridade para proteger os interesses da empresa.
+9.3. Canal para Denúncias
+O Grupo SBF disponibiliza um canal seguro e confidencial para que colaboradores possam relatar, de forma anônima ou identificada, qualquer suspeita de uso indevido dos cartões corporativos, fraudes, irregularidades ou descumprimento desta política. As denúncias podem ser feitas através da plataforma canalconfidencial.com.br/gruposbf (disponível 24h) ou pelo telefone 0800 721 0761 (de segunda a sábado, das 09h às 21h). As informações recebidas serão analisadas com rigor e confidencialidade pela área de Compliance ou pela área designada, que conduzirá as apurações conforme os protocolos internos. A empresa garante que nenhum denunciante de boa-fé sofrerá retaliações ou punições por reportar condutas suspeitas. Este canal também pode ser utilizado para relatar possíveis fraudes ou reincidências.
+
+10. Conclusão: Garantindo a Conformidade e a Integridade Financeira
+A Política de Uso dos Cartões Corporativos Clara nas Lojas do Grupo SBF é um documento fundamental que estabelece um arcabouço robusto para a gestão de despesas operacionais. Seu objetivo central é assegurar a utilização transparente, controlada e eficiente dos recursos financeiros da empresa, promovendo a adesão às normas internas e às melhores práticas de governança corporativa. A transição do modelo de "sangria de caixa" para o uso dos cartões corporativos, gerenciado por meio da plataforma Clara, representa um avanço estratégico significativo, otimizando o fluxo de caixa, reduzindo riscos e simplificando processos administrativos.
+
+A política é construída sobre pilares de clareza e responsabilidade distribuída, com diretrizes detalhadas para a aquisição e ativação dos cartões, limites de uso, e um processo rigoroso de prestação de contas que inclui requisitos de etiquetagem, comprovantes fiscais e prazos específicos. A diferenciação nos critérios de bloqueio preventivo, baseada no valor da transação e na recorrência, demonstra uma abordagem granular e proporcional na gestão de riscos. A atenção dedicada a cenários excepcionais, como o uso temporário de cartões entre lojas ou em casos de afastamento de gerentes, assegura a continuidade operacional sem comprometer o controle financeiro.
+
+As restrições de uso são explícitas e abrangentes, proibindo despesas pessoais, aquisições de bens patrimoniais e outras transações não relacionadas à operação da loja, reforçando o compromisso da empresa com a ética e a integridade. A existência de um canal de denúncias confidencial e a garantia de não retaliação para relatos de boa-fé sublinham a cultura de transparência e responsabilidade compartilhada na prevenção de fraudes.
+
+A política será revisada anualmente ou sempre que houver alterações no processo, garantindo sua contínua eficácia e relevância. A aprovação da Gerência Financeira é mandatória para essas revisões. É importante ressaltar que esta política complementa, mas não substitui, as diretrizes estabelecidas no Código de Conduta, Política de Reembolsos, Política de Conduta Ética e demais normas internas do Grupo SBF. Em caso de conflito entre documentos, prevalecerá a regra mais restritiva, priorizando sempre a mitigação de riscos.
+
+Anexo I – Quadro de Etiquetas por Tipo de Gasto
+A tabela a seguir relaciona as principais etiquetas da plataforma Clara aos tipos de gastos permitidos com o cartão corporativo, conforme a classificação contábil (contas SAP). O preenchimento correto é obrigatório para garantir a conformidade das prestações de contas e a rastreabilidade das despesas.
+
+| Código SAP | Descrição Etiqueta | Tipos de Gasto Atrelados |
+| :--------- | :----------------- | :----------------------- |
+| 5102505001 | MARKETING_PUBLICIDADE E PROPAGANDA | Ações promocionais, compra de brindes para campanha, contratação de mídia local, impulsionamento de redes sociais, banners promocionais. |
+| 5103505001 | MATERIAL DE LIMPEZA | Detergente, sabão, desinfetante, papel toalha, pano de chão, esponja, rodo, vassoura, álcool, produtos de higiene ambiental. |
+| 5103505005 | MATERIAL DE INFORMÁTICA | Mouse, teclado, cabos, pendrive, suportes de notebook, fontes, roteadores, hubs USB, cartões de memória (sem controle patrimonial). |
+| 5103505006 | MATERIAL DE ESCRITÓRIO | Canetas, clips, cadernos, pastas, blocos de anotação, grampeadores, etiquetas, organizadores de mesa. |
+| 5103505007 | MATERIAL DE COPA E COZINHA | Pratos, copos, talheres, filtros de café, garrafas térmicas, panos de prato, esponjas, potes plásticos (sem elétricos). |
+| 5103510001 | MANUTENÇÃO CIVIL | Pequenos reparos em paredes, troca de revestimentos, consertos em portas ou fechaduras (exceto chaveiro), troca de vidros, ajustes em prateleiras fixas. |
+| 5103510005 | MANUTENÇÃO ELETRICO | Troca de tomadas, disjuntores, interruptores, reatores, soquetes, extensões elétricas, pequenos reparos de fiação de baixa tensão. |
+| 5103510007 | MANUTENÇÃO EQUIPAMENTOS | Reparos em impressoras de etiqueta, máquinas de estampar, computadores (desde que fora de garantia e com baixo valor), ferramentas manuais. |
+| 5103510010 | MANUTENÇÃO AR-CONDICIONADO | Manutenção corretiva/preventiva simples de ar-condicionado (limpeza de filtro, carga de gás, troca de controle remoto ou peças simples). |
+| 5104007003 | TRANSPORTE SERVIÇOS EMERGENCIAS | Frete local emergencial, motoboy para transporte de documentos ou itens urgentes entre lojas ou matriz, entrega de materiais críticos. |
+| 5104505006 | SERVIÇOS GRÁFICOS E DE COPIADORAS | Impressão de banners, adesivos promocionais, folders, encadernações, produção de manuais impressos. |
+| 5104505007 | SERVIÇOS DE LIMPEZA | Contratação pontual de diaristas, faxineiras para limpeza extra, empresas terceirizadas em serviços avulsos de limpeza ou desinfecção emergencial. |
+| 5104610002 | CORREIOS_SEDEX/AR/POSTAGEM | Envio de documentos físicos via Sedex, AR, carta registrada, pacotes pequenos, devoluções via Correios. |
+| 5105505008 | LANCHES DE REFEIÇÕES | Compra de coffee break para ações internas, lanches para treinamentos, premiações, eventos internos autorizados. |
+| 5103505007 | AGUA POTÁVEL | Compra de galões de água mineral, garrafas para abastecimento da equipe ou clientes em loja (se previsto nas diretrizes operacionais). |
+| 5103505006 | BOBINA ECF | Compra de bobinas para ECF ou impressoras fiscais (uso obrigatório nas lojas que não têm fornecimento centralizado). |
+| 5103510007 | CHAVEIRO EMERGENCIAL | Serviços de abertura ou troca de fechadura de cofres, salas administrativas, estoques, vitrines – exclusivamente em situações emergenciais. |
+| 5103510007 | MANUTENÇÃO MAQ ESTAMPAR | Reparos simples ou ajustes técnicos em máquinas de estampar produtos promocionais nas lojas – sem controle patrimonial e com nota fiscal do prestador. |
+Observações: Alguns códigos SAP podem ser compartilhados, mas exigem descrição objetiva na plataforma Clara para distinção do tipo de serviço. Em todos os casos, a nota fiscal com CNPJ é obrigatória, e a etiqueta correta deve ser selecionada na plataforma. Em caso de dúvida sobre a classificação, a loja deve consultar previamente o setor de Contas a Receber.`;
+
+    // The fetchPolicyDocument function is no longer needed as content is embedded
+    // and can be removed, or left as a placeholder for potential future external fetching.
+    // For now, it's simplified as the content is immediately available.
+
+    documentSearchBtn.addEventListener('click', () => {
+        const query = documentSearchInput.value.trim();
+        if (!query) {
+            searchStatus.textContent = 'Por favor, digite um termo para buscar.';
+            documentSearchResults.innerHTML = '';
+            return;
+        }
+
+        searchLoadingIndicator.classList.remove('hidden');
+        searchStatus.textContent = 'Buscando...';
+        documentSearchResults.innerHTML = '';
+
+        const results = [];
+        const lowerCaseContent = policyDocumentContent.toLowerCase();
+        const lowerCaseQuery = query.toLowerCase();
+        let startIndex = 0;
+
+        while ((startIndex = lowerCaseContent.indexOf(lowerCaseQuery, startIndex)) > -1) {
+            // Find the start of the sentence (or a reasonable chunk)
+            const sentenceStart = Math.max(
+                0,
+                policyDocumentContent.lastIndexOf('.', startIndex - 1) + 1,
+                policyDocumentContent.lastIndexOf('\n', startIndex - 1) + 1,
+                policyDocumentContent.lastIndexOf(':', startIndex - 1) + 1
+            );
+            // Find the end of the sentence (or a reasonable chunk)
+            const sentenceEnd = Math.min(
+                policyDocumentContent.length,
+                policyDocumentContent.indexOf('.', startIndex + lowerCaseQuery.length),
+                policyDocumentContent.indexOf('\n', startIndex + lowerCaseQuery.length),
+                policyDocumentContent.indexOf(':', startIndex + lowerCaseQuery.length)
+            );
+            
+            // Adjust endOfSentence if not found, to capture till end of content or a larger chunk
+            const actualSentenceEnd = (sentenceEnd === -1) ? policyDocumentContent.length : sentenceEnd + 1; // +1 to include the delimiter
+
+            let sentence = policyDocumentContent.substring(sentenceStart, actualSentenceEnd).trim();
+            
+            // Ensure sentence is not empty after trimming
+            if (sentence) {
+                // Highlight the query in the sentence
+                const highlightedSentence = sentence.replace(new RegExp(query, 'gi'), match => `<strong class="bg-yellow-200 px-1 rounded">${match}</strong>`);
+                results.push(highlightedSentence);
+            }
+            
+            startIndex += lowerCaseQuery.length; // Move past the found query to find next occurrence
+        }
+
+        searchLoadingIndicator.classList.add('hidden');
+        if (results.length > 0) {
+            searchStatus.textContent = `Encontrado ${results.length} resultado(s) para "${query}":`;
+            results.forEach((result, index) => {
+                documentSearchResults.innerHTML += `
+                    <div class="p-3 border border-slate-200 rounded-lg bg-slate-50">
+                        <p class="text-sm text-slate-700">${result}</p>
+                    </div>
+                `;
+            });
+        } else {
+            searchStatus.textContent = `Nenhum resultado encontrado para "${query}".`;
+        }
+    });
+
 });
 </script>
 
