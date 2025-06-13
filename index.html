@@ -18,7 +18,7 @@
         - Report Info: Blocking Criteria. Goal: Compare. Method: Bar Chart. Justification: Intuitively compares urgency levels based on transaction value. Library: Chart.js (Canvas).
         - Report Info: Usage in Specific Situations (Absences). Goal: Organize/Inform. Method: Table. Justification: Clearly outlines rules and responsibilities for specific scenarios. Library: None (HTML/CSS).
         - Report Info: Support/Help Resources. Goal: Inform. Method: Text link. Justification: Provides direct access to external support. Library: None (HTML).
-        - Report Info: Document Search. Goal: Inform/Explore. Method: Text search input with results display. Justification: Allows direct keyword search within the source document. Library: Vanilla JS, content_fetcher API.
+        - Report Info: Document Search. Goal: Inform/Explore. Method: Text search input with results display. Justification: Allows direct keyword search within the source document. Library: Vanilla JS.
         - Report Info: Annex I Categories. Goal: Inform/Organize. Method: Interactive searchable list. Justification: Provides a practical quick-reference tool for users. Library: Vanilla JS.
         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. All diagrams are HTML/CSS, charts use Chart.js Canvas. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -61,7 +61,7 @@
                     <h3 class="text-2xl font-bold text-rose-800 mb-4">❌ Antes: Sangria de Caixa</h3>
                     <ul class="text-left space-y-3 text-rose-900">
                         <li class="flex items-start"><span class="text-xl mr-3">⚠️</span><div><strong class="block">Alto Risco Operacional:</strong> Manuseio de dinheiro em espécie, vulnerável a perdas e roubos.</div></li>
-                        <li class="flex items-start"><span class="text-xl mr-3">🐌</span><div><strong class="block">Processos Manuais e Lentos:</strong> Burocracia na solicitação, aprovação e conciliação de despesas.</div></li>
+                        <li class="flex items-start"><span class="text-xl mr-3">🐌</span><div><strong class="block">Processos Manuais e Lentos:</b> Burocracia na solicitação, aprovação e conciliação de despesas.</div></li>
                         <li class="flex items-start"><span class="text-xl mr-3">📉</span><div><strong class="block">Falta de Visibilidade:</strong> Controle financeiro reativo, dificultando o rastreamento de gastos.</div></li>
                     </ul>
                 </div>
@@ -74,6 +74,12 @@
                     </ul>
                 </div>
             </div>
+            <!-- Novo comunicado adicionado aqui -->
+            <div class="mt-12 p-6 bg-slate-50 border border-slate-200 rounded-lg text-left text-slate-700 max-w-4xl mx-auto shadow-sm">
+                <p class="font-semibold text-lg text-sky-800 mb-2">Importante!</p>
+                <p>Após a implantação do cartão corporativo em cada loja e a confirmação formal de recebimento, acompanhada do treinamento de uso da plataforma da Clara, o processo de sangria de despesas é descontinuado para as unidades Centauro. Isso ocorre por meio do bloqueio simultâneo do PDV e do fluxo de solicitações de sangrias na intranet corporativa, impedindo que a loja realize retiradas de dinheiro em espécie para pagamento de despesas.</p>
+            </div>
+            <!-- Fim do novo comunicado -->
         </section>
 
         <section id="process" class="mb-20">
@@ -131,7 +137,7 @@
                         <li class="flex items-center p-4 bg-rose-50/80 rounded-lg border-l-4 border-rose-400"><span class="text-2xl mr-4">🚫</span><div><strong class="block">Despesas Pessoais:</strong> Qualquer compra para benefício próprio.</div></li>
                         <li class="flex items-center p-4 bg-rose-50/80 rounded-lg border-l-4 border-rose-400"><span class="text-2xl mr-4">🚫</span><div><strong class="block">Bens Patrimoniais:</strong> Compra de eletrônicos ou móveis. (Solicitar via Compras).</div></li>
                         <li class="flex items-center p-4 bg-rose-50/80 rounded-lg border-l-4 border-rose-400"><span class="text-2xl mr-4">🚫</span><div><strong class="block">Saques e Adiantamentos:</strong> Retirar dinheiro ou receber adiantamentos.</div></li>
-                        <li class="flex items-center p-4 bg-rose-50/80 rounded-lg border-l-4 border-rose-400"><span class="text-2xl mr-4">🚫</span><div><strong class="block">Viagens e Transporte Pessoal:</strong> Despesas com passagens e apps de mobilidade.</div></li>
+                        <li class="flex items-center p-4 bg-rose-50/80 rounded-lg border-l-4 border-rose-400"><span class="text-2xl mr-4">🚫</span><div><strong class="block">Viagens e Transporte Pessoal:</b> Despesas com passagens e apps de mobilidade.</div></li>
                         <li class="flex items-center p-4 bg-rose-50/80 rounded-lg border-l-4 border-rose-400"><span class="text-2xl mr-4">🚫</span><div><strong class="block">Conflito de Interesses:</strong> Compras em empresas de familiares sem autorização.</div></li>
                     </ul>
                 </div>
