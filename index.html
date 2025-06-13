@@ -10,13 +10,14 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Corporate Clarity -->
-    <!-- Application Structure Plan: The SPA is designed as a user-friendly, thematic journey. It starts with a high-impact "Before vs. After" comparison to show value. It then presents a high-level process flowchart ("O Ciclo de Vida"). A central "Rules Dashboard" uses a table for allowed expenses and an icon-driven list for forbidden ones, facilitating quick understanding. The critical expense reporting process gets its own detailed flowchart section. Consequences are visualized with a bar chart for blocking criteria, making complex rules easy to grasp. A new section covers specific use cases for card usage during manager absences. The app concludes with a practical, searchable table of all allowed expense categories from Annex I, acting as a quick-reference tool. This structure prioritizes user task-flow and comprehension over the report's linear chapter format. -->
-    <!-- Visualization & Content Choices:
+    <!-- Application Structure Plan: The SPA is designed as a user-friendly, thematic journey. It starts with a high-impact "Before vs. After" comparison to show value. It then presents a high-level process flowchart ("O Ciclo de Vida"). A central "Rules Dashboard" uses a table for allowed expenses and an icon-driven list for forbidden ones, facilitating quick understanding. The critical expense reporting process gets its own detailed flowchart section. Consequences are visualized with a bar chart for blocking criteria, making complex rules easy to grasp. A new section covers specific use cases for card usage during manager absences. A dedicated "Suporte" section is added for external help resources. The app concludes with a practical, searchable table of all allowed expense categories from Annex I, acting as a quick-reference tool. This structure prioritizes user task-flow and comprehension over the report's linear chapter format. -->
+    <!-- Visualization & Content Choices: 
         - Report Info: Before vs. After (Cash vs. Card). Goal: Inform/Compare. Method: HTML/CSS side-by-side cards. Justification: Immediate visual impact. Library: None.
         - Report Info: Card Lifecycle. Goal: Organize. Method: HTML/CSS flowchart. Justification: Simple overview of the core process. Library: None.
         - Report Info: Allowed Expense Categories. Goal: Compare/Inform. Method: Table. Justification: Provides clear, structured details for each category instead of a general proportion. Library: None (HTML/CSS).
         - Report Info: Blocking Criteria. Goal: Compare. Method: Bar Chart. Justification: Intuitively compares urgency levels based on transaction value. Library: Chart.js (Canvas).
         - Report Info: Usage in Specific Situations (Absences). Goal: Organize/Inform. Method: Table. Justification: Clearly outlines rules and responsibilities for specific scenarios. Library: None (HTML/CSS).
+        - Report Info: Support/Help Resources. Goal: Inform. Method: Text link. Justification: Provides direct access to external support. Library: None (HTML).
         - Report Info: Annex I Categories. Goal: Inform/Organize. Method: Interactive searchable list. Justification: Provides a practical quick-reference tool for users. Library: Vanilla JS.
         CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. All diagrams are HTML/CSS, charts use Chart.js Canvas. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
@@ -42,6 +43,7 @@
                 <button data-target="rules" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Regras</button>
                 <button data-target="consequences" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Consequências</button>
                 <button data-target="situations" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Situações Específicas</button>
+                <button data-target="support" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Suporte</button>
                 <button data-target="reference" class="nav-button text-sm font-semibold text-slate-700 px-3 py-2 rounded-md">Consulta Rápida</button>
             </nav>
         </div>
@@ -101,7 +103,7 @@
         <section id="rules" class="mb-20">
             <h2 class="text-3xl font-bold text-center mb-12 text-sky-900">Regras de Ouro: O Que Você Precisa Saber</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
+                
                 <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col">
                     <h3 class="text-xl font-bold text-center text-slate-900 mb-4">Gastos Permitidos</h3>
                     <p class="text-center text-sm text-slate-600 mb-6">O cartão deve ser usado exclusivamente para despesas operacionais da loja. Veja as categorias mais comuns.</p>
@@ -209,6 +211,16 @@
             </div>
         </section>
 
+        <section id="support" class="mb-20 bg-white rounded-xl shadow-lg p-6 text-center">
+            <h2 class="text-3xl font-bold text-center mb-4 text-sky-900">Suporte e Canais de Ajuda</h2>
+            <p class="text-lg text-slate-600 max-w-3xl mx-auto mb-8">Precisa de ajuda com a plataforma Clara, tem dúvidas sobre funcionalidades ou encontrou algum problema?</p>
+            <p class="mb-4 text-slate-700">Acesse a central de ajuda completa da Clara para encontrar respostas e soluções:</p>
+            <a href="https://ajuda.clara.com/hc/pt-br/categories/4413203275155-Funcionalidades-da-Plataforma-Clara" target="_blank" class="inline-block bg-sky-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-sky-700 transition duration-300 shadow-md">
+                https://l1nq.com/47TUr
+            </a>
+            <p class="text-sm text-slate-500 mt-4">Este link redireciona para a Central de Ajuda da Clara.</p>
+        </section>
+
         <section id="reference" class="mb-16">
             <h2 class="text-3xl font-bold text-center mb-4 text-sky-900">Consulta Rápida de Despesas</h2>
             <p class="text-lg text-center text-slate-600 max-w-3xl mx-auto mb-8">Não tem certeza se um gasto é permitido? Pesquise aqui na lista oficial de categorias autorizadas.</p>
@@ -230,7 +242,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
+    
     const wrapLabel = (label) => {
         const maxLength = 16;
         if (typeof label !== 'string' || label.length <= maxLength) return label;
@@ -255,7 +267,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let label = item.chart.data.labels[item.dataIndex];
         return Array.isArray(label) ? label.join(' ') : label;
     };
-
+    
     const sharedChartOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -373,11 +385,11 @@ document.addEventListener('DOMContentLoaded', function () {
             expenseTable.innerHTML += row;
         });
     };
-
+    
     searchInput.addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
-        const filteredData = expenseData.filter(item =>
-            item.label.toLowerCase().includes(searchTerm) ||
+        const filteredData = expenseData.filter(item => 
+            item.label.toLowerCase().includes(searchTerm) || 
             item.examples.toLowerCase().includes(searchTerm)
         );
         renderTable(filteredData);
